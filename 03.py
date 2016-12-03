@@ -1,24 +1,27 @@
+def is_triangle(a, b, c):
+    return (a + b) > c and (a + c) > b and (b + c) > a
+
+# after conforming the input
 collector = []
-with open("test_input.txt", "r") as f:
+with open('test_input.txt', 'r') as f:
     for line in f.readlines():
-        group = pattern.search(line).groups()
-        a, b, c = map(lambda x: int(x), group)
+        # explicit, because otherwise it's ugly
+        a, b, c = map(lambda x: int(x), line.split())
         collector.append((a, b, c))
 
 i = 0
-for line in data:
-    group = pattern.search(line).groups()
-    a, b, c = map(lambda x: int(x), group)
-    if (a + b) > c and (a + c) > b and (b + c) > a:
+for line in collector:
+    if is_triangle(*line):
         i += 1
-print("Solution Part 1:", i)
+print("Triangles Part 1:", i)
 
 i = 0
 while collector:
-    # disposes data
+    # get a group of 3 - and this disposes the initial data, too
     group = [collector.pop() for _ in range(3)]
+    # build a patch of 3 row values per column
     for tri in [[group[y][x] for y in range(3)] for x in range(3)]:
-        if tri[0] + tri[1] > tri[2] and tri[1] + tri[2] > tri[0] and tri[0] + tri[2] > tri[1]:
+        if is_triangle(*tri):
             i += 1
 
-print("Solution Part 2:", len(triangles))
+print("Triangles Part 2:", i)

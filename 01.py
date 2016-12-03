@@ -54,3 +54,4 @@ if __name__ == "__main__":
     # It most likely would've been for any pair of tuples with [0, N] -> (0, 1), (1, 2) ... (N-1, N)
     # and then search for an intersection by any tuple being [[x0, y0], [x1, y1]] | [[x2, y2], [x3, y3]]
     # and then doing the standard raycasting variant (?)
+    # or: Just ray march (literally): Walk from p0 to p1 by 1 step each and check if it intersects any previous points.

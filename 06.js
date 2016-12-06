@@ -1,15 +1,23 @@
-var lines = document.documentElement.innerText.split("\n")
-lines = lines.splice(0, 572);
+let lines = document.documentElement.innerText.split("\n")
+lines = lines.splice(0, lines.length - 1);
 
-var solutionOne = "";
-var solutionTwo = "";
+let solutionOne = "";
+let solutionTwo = "";
 
-var counter = [];
-for(var i = 0; i < 8; i++) { 
-    var collector = {};
+const selector = (ref, original, value, result, func) => {
+    if(func(ref, value)) {
+        return [value, result];
+    }
+    return [ref, original];
+}
+
+let counter = [];
+// strings are evenly distributed, no need to check it each time
+for(var i = 0; i < lines[0].length; i++) { 
+    const collector = {};
     lines.forEach((value) => {
         if(!value) return;
-        var char = value.charAt(i);
+        let char = value.charAt(i);
         if(!collector[char]) {
             collector[char] = 1;
             return;
@@ -20,30 +28,16 @@ for(var i = 0; i < 8; i++) {
 }
 
 counter.forEach((value) => {
-    var keys = Object.keys(value);
-    var max = 0;
-    var letter = "";
+    let max = [0, ""];
+    let min = [lines.length, ""];
+    const keys = Object.keys(value);
     keys.forEach((key) => {
-        if(max < value[key]) {
-            max = value[key]
-            letter = key;
-        }
+        max = selector(max[0], max[1], value[key], key, (a, b) => { return a < b; });
+        min = selector(min[0], min[1], value[key], key, (a, b) => { return a > b; });
     });
-    solutionOne += letter;
+    solutionOne += max[1];
+    solutionTwo += min[1];
 })
 
-counter.forEach((value) => {
-    var keys = Object.keys(value);
-    var min = 50;
-    var letter = "";
-    keys.forEach((key) => {
-        if(min > value[key]) {
-            min = value[key]
-            letter = key;
-        }
-    });
-    solutionTwo += letter;
-})
-
-console.log("Column Selector One: " + solutionOne);
-console.log("Column Selector Two: " + solutionTwo);
+console.log("Column Selector Part One: " + solutionOne);
+console.log("Column Selector Part Two: " + solutionTwo);
